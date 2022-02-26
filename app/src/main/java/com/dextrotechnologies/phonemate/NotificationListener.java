@@ -29,8 +29,20 @@ public class NotificationListener extends NotificationListenerService {
         Notification notification = sbn.getNotification();
         Bundle bundle = notification.extras;
 
-        String from = bundle.getString(NotificationCompat.EXTRA_TITLE);
-        String message = bundle.getString(NotificationCompat.EXTRA_TEXT);
+        String from;
+        String message;
+
+        try{
+            from = bundle.getString(NotificationCompat.EXTRA_TITLE);
+        }catch (ClassCastException e){
+            return;
+        }
+
+        try{
+            message = bundle.getString(NotificationCompat.EXTRA_TEXT);
+        }catch (ClassCastException e) {
+            return;
+        }
 
         Log.i(TAG, "From: " + from);
         Log.i(TAG, "Message: " + message);
