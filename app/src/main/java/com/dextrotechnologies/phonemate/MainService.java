@@ -17,6 +17,8 @@ public class MainService extends Service {
     private static final int NOTIF_ID = 1;
     private static final String NOTIF_CHANNEL_ID = "default";
 
+    private static Context contextOfApplication;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -43,6 +45,8 @@ public class MainService extends Service {
 
         // Start Foreground Service
         startForeground();
+
+        contextOfApplication = this;
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -77,4 +81,9 @@ public class MainService extends Service {
         channel.setDescription("Channel description");
         notificationManager.createNotificationChannel(channel);
     }
+
+    public static Context getContextOfApplication() {
+        return contextOfApplication;
+    }
+
 }
