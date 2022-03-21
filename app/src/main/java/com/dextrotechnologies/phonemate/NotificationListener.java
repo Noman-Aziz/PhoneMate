@@ -12,10 +12,16 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class NotificationListener extends NotificationListenerService {
 
     private static final String TAG = "NotificationListener";
-    private static final String WA_PACKAGE = "com.whatsapp";
+
+    private static JSONObject whatsappNotifications = new JSONObject();
+    private static JSONArray whatsappNotificationsContainer = new JSONArray();
 
     @Override
     public void onListenerConnected() {
@@ -24,28 +30,16 @@ public class NotificationListener extends NotificationListenerService {
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
-        if (!sbn.getPackageName().equals(WA_PACKAGE)) return;
 
-        Notification notification = sbn.getNotification();
-        Bundle bundle = notification.extras;
+        String app = sbn.getPackageName();
 
-        String from;
-        String message;
-
-        try{
-            from = bundle.getString(NotificationCompat.EXTRA_TITLE);
-        }catch (ClassCastException e){
-            return;
+        switch (app) {
+            case "com.whatsapp":
+                whatsapp(sbn);
+                break;
+            default:
+                return;
         }
-
-        try{
-            message = bundle.getString(NotificationCompat.EXTRA_TEXT);
-        }catch (ClassCastException e) {
-            return;
-        }
-
-        Log.i(TAG, "From: " + from);
-        Log.i(TAG, "Message: " + message);
     }
 
     public static boolean isNotificationServiceEnabled(Context c){
@@ -65,6 +59,58 @@ public class NotificationListener extends NotificationListenerService {
             }
         }
         return false;
+    }
+
+    private static void whatsapp(StatusBarNotification sbn){
+        // Clearing Containers if already sent
+        if (whatsappNotifications.length() != 0) {
+            whatsappNotifications = new JSONObject();
+            whatsappNotificationsContainer = new JSONArray();
+        }
+
+
+        Notification notification = sbn.getNotification();
+        Bundle bundle = notification.extras;
+
+        String from;
+        String message;
+
+        try{
+            from = bundle.getString(NotificationCompat.EXTRA_TITLE);
+        }catch (ClassCastException e){
+            return;
+        }
+
+        try{
+            message = bundle.getString(NotificationCompat.EXTRA_TEXT);
+        }catch (ClassCastException e) {
+            return;
+        }
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("From: " , from);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            obj.put("Message: " , message);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        whatsappNotificationsContainer.put(obj);
+    }
+
+    public static JSONObject GetWhatsappNotifications(){
+
+        try {
+            whatsappNotifications.put("whatsappNotifications", whatsappNotificationsContainer);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return whatsappNotifications;
     }
 
 }

