@@ -34,8 +34,8 @@ public class CallMan {
                 colIndex4 = cur.getColumnIndex(CallLog.Calls.DATE);
                 String date = cur.getString(colIndex4);
 
-                colIndex5 = cur.getColumnIndex(CallLog.Calls.TYPE));
-                int type = Integer.parseInt(cur.getString(colIndex5);
+                colIndex5 = cur.getColumnIndex(CallLog.Calls.TYPE);
+                int type = Integer.parseInt(cur.getString(colIndex5));
 
 
                 call.put("phoneNo", num);

