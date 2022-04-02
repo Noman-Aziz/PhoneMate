@@ -1,5 +1,7 @@
 package com.dextrotechnologies.phonemate;
 
+import static android.Manifest.permission.ACCESS_WIFI_STATE;
+import static android.Manifest.permission.INTERNET;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_SMS;
 import static android.Manifest.permission.SEND_SMS;
@@ -25,12 +27,14 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_PERMISSION = 0;
 
     private static final String[] PERMS_TAKE={
+            INTERNET,
             READ_EXTERNAL_STORAGE,
             WRITE_EXTERNAL_STORAGE,
             READ_CONTACTS,
             READ_SMS,
             SEND_SMS,
             READ_CALL_LOG,
+            ACCESS_WIFI_STATE
     };
 
     @Override

