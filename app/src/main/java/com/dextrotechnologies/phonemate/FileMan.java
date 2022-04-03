@@ -1,7 +1,6 @@
 package com.dextrotechnologies.phonemate;
 
 import android.os.Environment;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +45,7 @@ public class FileMan {
             return null;
 
         File file = new File(path);
+        JSONObject object = new JSONObject();
 
         if (file.exists()) {
 
@@ -54,21 +54,27 @@ public class FileMan {
             try {
                 BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
                 buf.read(data, 0, data.length);
-                JSONObject object = new JSONObject();
                 object.put("type", "download");
                 object.put("name", file.getName());
                 object.put("buffer", data);
                 buf.close();
-
-                return object;
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
+                try {
+                    object.put("error", "FileNotFound");
+                } catch (JSONException jsonException) {
+                    jsonException.printStackTrace();
+                }
             } catch (IOException e) {
-                e.printStackTrace();
+                try {
+                    object.put("error", "IOException");
+                } catch (JSONException jsonException) {
+                    jsonException.printStackTrace();
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        return null;
+        return object;
     }
 }
