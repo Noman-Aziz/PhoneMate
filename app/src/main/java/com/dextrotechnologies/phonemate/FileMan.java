@@ -1,18 +1,23 @@
 package com.dextrotechnologies.phonemate;
 
 import android.os.Environment;
+import android.util.Base64;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class FileMan {
+
+    private static final int BUFFER_SIZE = 4096; // 4KB
+
     public static JSONArray walk(String pathReq) {
 
         JSONArray values = new JSONArray();
@@ -40,41 +45,40 @@ public class FileMan {
         return values;
     }
 
-    public static JSONObject downloadFile(String path) {
-        if (path == null)
-            return null;
+    public static String downloadFile(String pathReq) {
+        if (pathReq == null)
+            return "Path Not Given";
+
+        String path = Environment.getExternalStorageDirectory().toString() + pathReq;
 
         File file = new File(path);
         JSONObject object = new JSONObject();
 
         if (file.exists()) {
 
-            int size = (int) file.length();
-            byte[] data = new byte[size];
+            InputStream inputStream = null;
             try {
-                BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
-                buf.read(data, 0, data.length);
-                object.put("type", "download");
-                object.put("name", file.getName());
-                object.put("buffer", data);
-                buf.close();
+                inputStream = new FileInputStream(path);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                try {
-                    object.put("error", "FileNotFound");
-                } catch (JSONException jsonException) {
-                    jsonException.printStackTrace();
-                }
-            } catch (IOException e) {
-                try {
-                    object.put("error", "IOException");
-                } catch (JSONException jsonException) {
-                    jsonException.printStackTrace();
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+
+            long fileSize = new File(path).length();
+            byte[] allBytes = new byte[(int) fileSize];
+
+            int bytesRead = 0;
+            try {
+                bytesRead = inputStream.read(allBytes);
+            } catch (IOException e) {
+                Log.e("FILEMSG", path + e.getMessage() );
+            }
+
+            return Base64.encodeToString(allBytes, Base64.DEFAULT);
+
+        } else{
+            Log.e("FILEMSG", "GOUCHI NOT" + path );
         }
-        return object;
+
+        return "File Not Found";
     }
 }

