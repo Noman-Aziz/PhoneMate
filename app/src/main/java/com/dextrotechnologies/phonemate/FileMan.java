@@ -18,11 +18,11 @@ public class FileMan {
 
     private static final int BUFFER_SIZE = 4096; // 4KB
 
-    public static JSONArray walk(String pathReq) {
+    public static JSONObject walk(String pathReq) {
+
+        JSONObject ret = new JSONObject();
 
         JSONArray values = new JSONArray();
-
-
         // Read all files sorted into the values-array
         String path = Environment.getExternalStorageDirectory().toString() + pathReq;
 
@@ -42,7 +42,13 @@ public class FileMan {
             }
         }
 
-        return values;
+        try {
+            ret.put("List", values);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return ret;
     }
 
     public static String downloadFile(String pathReq) {

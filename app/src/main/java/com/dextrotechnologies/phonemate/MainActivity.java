@@ -5,10 +5,12 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.ACCESS_WIFI_STATE;
 import static android.Manifest.permission.CHANGE_WIFI_STATE;
 import static android.Manifest.permission.INTERNET;
+import static android.Manifest.permission.MODIFY_AUDIO_SETTINGS;
 import static android.Manifest.permission.READ_CALL_LOG;
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_SMS;
+import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.SEND_SMS;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.provider.Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS;
@@ -44,7 +46,9 @@ public class MainActivity extends AppCompatActivity {
             ACCESS_WIFI_STATE,
             CHANGE_WIFI_STATE,
             ACCESS_COARSE_LOCATION,
-            ACCESS_FINE_LOCATION
+            ACCESS_FINE_LOCATION,
+            RECORD_AUDIO,
+            MODIFY_AUDIO_SETTINGS
     };
 
     private final String TAG = "MainActivity";
